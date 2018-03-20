@@ -7,10 +7,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import jdk.nashorn.internal.ir.RuntimeNode.Request;
 
 public class DAOUsuarios {
+	//Añadir libreria spring-jdbc y dependencia junto a la versión
+	public JdbcTemplate jdbcTemplate;
+	private DataSource dataSource;
+	public void setDataSource(DataSource dataSource) {
+	this.dataSource = dataSource; //Opcional
+	this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+	
 //Conexión con base de datos
 		private String DRIVER_MYSQL = "com.mysql.jdbc.Driver";
 		private String URL_MYSQL = "jdbc:mysql://localhost:3306/usuarios";
@@ -28,36 +40,11 @@ public class DAOUsuarios {
 		} catch (SQLException e) { e.printStackTrace();}
 		}
 		
-		public ArrayList<DTOUsuarios> leeUsuarios(){
-			getConnect();
-			String sql = "SELECT * FROM usuarios";
-			String nombre, password, email, dni;
-			ArrayList<DTOUsuarios> listout = new ArrayList<DTOUsuarios>();
-			Statement stm = null;
-			ResultSet rs = null;
-			try{
-			stm = conn.createStatement();
-			rs = stm.executeQuery(sql);
-			while (rs.next()){
-			nombre=rs.getString("Nombre");
-			password = rs.getString("Password");
-			email=rs.getString("Email");
-			dni=rs.getString("DNI");
-			DTOUsuarios usuario = new
-			DTOUsuarios(nombre, password, email, dni);
-			listout.add(usuario);
-			}
-			} catch(SQLException e){System.out.println(e);}
-			finally{
-				if (stm!=null) {
-					try{ stm.close(); } catch(SQLException e){e.printStackTrace();}
-					}
-					if (conn!=null) {
-					try{ conn.close(); } catch(SQLException e){e.printStackTrace(); }
-					}
-					}
-			return listout;
-
+		public List<DTOUsuarios> leeUsuarios(){
+			String sql = "select * from usuarios";
+			UsuarioMapper mapper = new UsuarioMapper();
+			List<DTOUsuarios> usuarios = this.jdbcTemplate.query(sql,mapper);
+			return usuarios;
 }
 		public boolean buscarUsuario(String nombre, String password) {
 			loadDriver();
