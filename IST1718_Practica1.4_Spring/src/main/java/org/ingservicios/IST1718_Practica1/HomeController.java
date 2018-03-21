@@ -1,7 +1,7 @@
 package org.ingservicios.IST1718_Practica1;
 
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,14 +30,14 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping(value = "/Servlet1", method = RequestMethod.GET)
+	@RequestMapping(value = "/Servlet1", method = {RequestMethod.GET,RequestMethod.POST})
 	public String servlet1 (HttpServletRequest request, Model model) {
 		String usuario = request.getParameter("username");
 		String pass = request.getParameter("pass");
 		//url a asignar dependiendo de si es administrador o no.
 		String url="";
 		DAOUsuarios du = new DAOUsuarios();
-		ArrayList <DTOUsuarios> lista = du.leeUsuarios();
+		List <DTOUsuarios> lista = du.leeUsuarios();
 		//Posicion para recorrer la lista
 		int posicion=0;
 		for(posicion=0;posicion<lista.size();posicion++) {
@@ -93,7 +93,7 @@ public class HomeController {
 				
 				
 				DAOUsuarios du = new DAOUsuarios();
-				ArrayList <DTOUsuarios> lista = du.leeUsuarios();
+				List <DTOUsuarios> lista = du.leeUsuarios();
 				
 				boolean variable=false;
 				String url="";

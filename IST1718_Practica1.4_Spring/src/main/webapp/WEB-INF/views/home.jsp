@@ -9,7 +9,7 @@
 <body>
 <h1>Bienvenido a la practica1.4 de Spring</h1>
 <h2>Control de acceso</h2>
-<form action="http://localhost:11423/Practica1.4/Servlet1" method=post>
+<form action="Servlet1" method=post>
 Name: <input type=text name=username>
 <br>
 Password: <input type=password name= pass>
